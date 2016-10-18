@@ -1,0 +1,304 @@
+<?php
+
+session_start();
+if (isset($_SESSION['username'])) {
+ }
+else{
+   echo '<script type="text/javascript">document.location = "admin/login.php";</script>';
+ }
+require_once('css_apis/api_class.php'); 
+$data=$css->run_query('SELECT * FROM `moc_new` JOIN subjects WHERE moc_new.Subid=subjects.SubId');
+$data_subject=$css->run_query("Select * from subjects");
+ 
+if(isset($_POST['name'])){
+if($_POST['name']=='rightans'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'rightans' , $value , 'Mocid' , $pk);
+}
+
+if($_POST['name']=='moc_ques'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'Moc_ques' , $value , 'Mocid' , $pk);
+}
+
+if($_POST['name']=='opt1'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'opt1' , $value , 'Mocid' , $pk);
+}
+
+if($_POST['name']=='opt2'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'opt2' , $value , 'Mocid' , $pk);
+}
+
+if($_POST['name']=='opt3'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'opt3' , $value , 'Mocid' , $pk);
+}
+
+if($_POST['name']=='opt4'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'opt4' , $value , 'Mocid' , $pk);
+}
+
+if($_POST['name']=='sub_id'){
+    $pk = $_POST['pk']; //primary key aka ID
+    $value = $_POST['value']; //value of the field
+    $css->update_single_where_key('moc_new' , 'Subid' , $value , 'Mocid' , $pk);
+}
+
+}
+
+// if(isset($_GET['status'])){
+// 	$query="SELECT * FROM `user` join usersubjects WHERE user.user_id =usersubjects.UserId AND status=$_GET[status] group BY user_id ";
+// 	$data = $css->run_query($query);
+// }
+
+
+
+?>
+
+
+
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.6/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/cr-1.3.2/r-2.1.0/datatables.min.css"/>
+
+
+<!-- 
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+ -->
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/main.css">
+
+  <style>
+  body{
+  	background-color: white;
+  }
+  	</style>
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+				<h1 class='text-center'>Moc Mcqs Panel</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1"></div>
+			<!-- <div class="col-sm-10">
+				<h5 style='float:left;font-size:15px;padding-right:10px;'>Show For: </h5>
+				<div style='float:left'>
+					<a href="registrations.php?status='Pending'" role='btn' class='btn btn-primary'>Pending</a>
+					<a href="registrations.php?status='Paid'"  role='btn' class='btn btn-primary'>Paid</a>
+					<a href="registrations.php"  role='btn' class='btn btn-primary'>All</a>
+				</div>
+			</div> -->
+		</div>
+		<div class="row"> &nbsp;</div>
+		<!-- <div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+				<h5 style='float:left;font-size:15px;padding-right:10px;'>Search: </h5>
+				<div style='float:left'>
+				<div class="form-group" id='search_div'>
+				</div>
+				</div>
+			</div>
+		</div> -->
+		<br>
+		<div class="row">
+			<input type="button" id='enadis' value='Enable'>
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+				
+				<table id="registrations_table" class='table table-respo'>
+				    <thead>
+				      <tr>
+				      	<th>S.no</th>
+				      	<!-- <th>Select</th> -->
+				      	<th>Subid</th>
+				      	<th>Moc Mcq Question</th>
+				      	<th>Option 1</th>
+				      	<th>Option 2</th>
+				      	<th>Option 3</th>
+				      	<th>Option 4</th>
+				      	<th>Right Ans</th>
+				      	<th>Delete</th>
+				      	<!-- <th>End</th> -->
+				      </tr>
+				    </thead>
+				    <tbody>
+
+				     <tr>
+				     	
+				      <?php $no=1; foreach ($data as $key ):
+				      	
+				      ?>
+				      		<td><?php echo $no; ?></td>
+				      		<!-- <td><input type="checkbox" class='checks' value='<?=$key['user_id']?>'></td> -->
+				      		<td>
+				      		<a href="#" class="getlist"  data-name="sub_id"  data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['SubName'] ?></a>	
+				      		</td>
+				      		<td>
+				      			<a href="#" class="abc" data-type="textarea" data-name="moc_ques" data-url="view_moc_mcqs.php" data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['Moc_ques'] ?></a>	
+				      		</td>
+				      		<td>
+				      			
+				      		<a href="#" class="abc" data-type="text" data-name="opt1" data-url="view_moc_mcqs.php" data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['opt1'] ?></a>
+
+
+				      		</td>
+				      		<td>
+
+				      		<a href="#" class="abc" data-type="text" data-name="opt2" data-url="view_moc_mcqs.php" data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['opt2'] ?></a>
+
+				      		</td>
+				      		<td>
+				      			
+				      		<a href="#" class="abc" data-type="text" data-name="opt3" data-url="view_moc_mcqs.php" data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['opt3'] ?></a>
+
+				      		</td>
+				      		<td>
+				      			
+				      		<a href="#" class="abc" data-type="text" data-name="opt4" data-url="view_moc_mcqs.php" data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['opt4'] ?></a>
+
+				      		</td>
+				      		<td>
+
+				      		<a href="#" class="abc" data-type="text" data-name="rightans" data-url="view_moc_mcqs.php" data-pk="<?php echo $key['Mocid'] ?>"><?php echo $key['rightans'] ?></a>
+
+				      		</td>
+				      		<td><a class="delete" href="delete_mcqs.php?mcqid=<?= $key['Mocid'] ?>">Delete</a></td>
+				      </tr>
+				      <?php 
+				      $no++;
+				      endforeach;
+				       ?>
+				    </tbody>
+				  </table>
+
+			</div>
+
+		</div>
+	
+
+	</div>
+
+
+  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.6/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/cr-1.3.2/r-2.1.0/datatables.min.js"></script>
+  
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+<!-- 
+  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+ -->
+<script>
+
+ var enable = 0;
+ $("#enadis").click(function(){
+  // alert(1);
+  if(enable==0){
+   enable=1;
+   $(this).val('Enable');
+   $('.abc').editable('enable');
+   $('.getlist').editable('enable');
+
+  }else{
+   enable=0;
+   $(this).val('Disable');
+
+
+   $('.abc').editable('disable');
+   $('.getlist').editable('disable');
+  }
+
+
+
+ });
+
+ </script>
+
+  <script>
+  $(function(){
+
+    // $.fn.editable.defaults.mode = 'inline';
+
+
+
+    $('.abc').editable({
+        url:  "view_moc_mcqs.php",
+        title: 'Enter Value',
+        ajaxOptions: {
+         type: 'POST'
+       }
+  })
+
+      $('.abc').editable({
+        url:  "view_moc_mcqs.php",
+        title: 'Enter Moc Question',
+        ajaxOptions: {
+         type: 'POST'
+       }
+  })
+
+
+       $('.getlist').editable({
+        value: 1,   
+        type:'select',
+        url:  "view_moc_mcqs.php",
+         source: [
+             {value: 1, text: 'Select Category'},
+              <?php foreach ($data_subject as $key ){
+              ?> 
+              {value: '<?php echo $key['SubId'] ?>', text: '<?php echo $key['SubName'] ?>'},
+             	<?php } ?>
+           ],
+        ajaxOptions: {
+         type: 'POST'
+       }
+
+
+
+
+   
+
+  })
+       $('.abc').editable('disable');
+   $('.getlist').editable('disable');
+
+    $("#registrations_table").dataTable();
+
+    // $('.abc').editable('disable');
+});
+
+$("input[type=search]");
+
+
+// $(document).ready(function() {
+// 	var sbox = $(".search input");
+// 	$("#search_div").append(sbox);
+// 	$(".search").remove();
+// });
+
+
+
+
+  </script>
+</body>
+</html>
+
